@@ -71,7 +71,7 @@ if __name__ == '__main__':
         #   model = model_from_json(json.loads(jfile.read()))\
         #
         # instead.
-        model = model_from_json(jfile.read())
+        model = model_from_json(json.loads(jfile.read()))
 
 
     model.compile("adam", "mse")
