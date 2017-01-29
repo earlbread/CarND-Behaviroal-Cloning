@@ -1,2 +1,6 @@
 simulator
 .DS_Store
+IMG
+driving_log.csv
+model.h5
+model.json
