@@ -4,3 +4,4 @@ IMG
 driving_log.csv
 model.h5
 model.json
+__pycache__
