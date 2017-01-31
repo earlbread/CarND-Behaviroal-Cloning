@@ -1,35 +1,9 @@
-import csv
-import json
-
-import cv2
-import numpy as np
-
 from keras.models import Sequential
 from keras.layers import Dense, Activation, Flatten
 from keras.layers.convolutional import Convolution2D
 from keras.layers.normalization import BatchNormalization
 
-
-DRIVING_LOG_FILE = 'driving_log.csv'
-JSON_MODEL_FILE = 'model.json'
-WEIGHTS_FILE = 'model.h5'
-
-
-def load_train_data():
-    images = []
-    steering_angles = []
-
-    with open(DRIVING_LOG_FILE, 'rt') as f:
-        log_reader = csv.reader(f, skipinitialspace=True)
-        for row in log_reader:
-            images.append(cv2.imread(row[0]))
-            steering_angles.append(float(row[3]))
-
-    images = np.array(images)
-    steering_angles = np.array(steering_angles)
-
-    return images, steering_angles
-
+import helper
 
 def get_model():
     model = Sequential()
@@ -77,22 +51,12 @@ def train_model(model, X_train, y_train):
     model.compile('adam', 'mse')
     history = model.fit(X_train, y_train, nb_epoch=EPOCHS, batch_size=BATCH_SIZE,
                         validation_split=0.2, shuffle=True)
+    helper.save_model(model)
 
-    # Store model in file
-    model_json = model.to_json()
-    with open(JSON_MODEL_FILE, 'w') as f:
-        json.dump(model_json, f)
-
-    model.save_weights(WEIGHTS_FILE)
-
-
-def preprocess(images):
-    images = np.array([cv2.resize(img, (200, 66)) for img in images])
-    return images
 
 if __name__ == '__main__':
-    X_train, y_train = load_train_data()
-    X_train = preprocess(X_train)
+    X_train, y_train = helper.load_train_data()
+    X_train = helper.preprocess(X_train)
     model = get_model()
     model.summary()
     train_model(model, X_train, y_train)
