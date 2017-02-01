@@ -25,8 +25,18 @@ def load_train_data():
     return images, steering_angles
 
 
+def crop(image):
+    h = 66
+    w = 200
+
+    x = int((image.shape[1] - w) / 2)
+    y = int((image.shape[0] - h) / 2)
+
+    return image[y:y+h, x:x+w]
+
+
 def preprocess(images):
-    images = np.array([cv2.resize(img, (200, 66)) for img in images])
+    images = np.array([crop(img) for img in images])
     return images
 
 
