@@ -17,7 +17,11 @@ def load_train_data():
 
     for i, steering in enumerate(log['steering']):
         images.append(cv2.imread(log['center'][i]))
+        images.append(cv2.imread(log['left'][i]))
+        images.append(cv2.imread(log['right'][i]))
         steering_angles.append(steering)
+        steering_angles.append(steering + 0.25)
+        steering_angles.append(steering - 0.25)
 
     images = np.array(images)
     steering_angles = np.array(steering_angles)
