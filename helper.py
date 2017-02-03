@@ -1,8 +1,8 @@
-import csv
 import json
 
 import cv2
 import numpy as np
+import pandas as pd
 
 DRIVING_LOG_FILE = 'driving_log.csv'
 JSON_MODEL_FILE = 'model.json'
@@ -13,11 +13,11 @@ def load_train_data():
     images = []
     steering_angles = []
 
-    with open(DRIVING_LOG_FILE, 'rt') as f:
-        log_reader = csv.reader(f, skipinitialspace=True)
-        for row in log_reader:
-            images.append(cv2.imread(row[0]))
-            steering_angles.append(float(row[3]))
+    log = pd.read_csv(DRIVING_LOG_FILE, skipinitialspace=True)
+
+    for i, steering in enumerate(log['steering']):
+        images.append(cv2.imread(log['center'][i]))
+        steering_angles.append(steering)
 
     images = np.array(images)
     steering_angles = np.array(steering_angles)
