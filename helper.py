@@ -39,8 +39,22 @@ def crop(image):
     return image[y:y+h, x:x+w]
 
 
+def equalizeHist(image):
+    image[:,:,0] = cv2.equalizeHist(image[:,:,0])
+    image[:,:,1] = cv2.equalizeHist(image[:,:,1])
+    image[:,:,2] = cv2.equalizeHist(image[:,:,2])
+    return image
+
+
+def process_image(image):
+    image = crop(image)
+    image = equalizeHist(image)
+
+    return image
+
+
 def preprocess(images):
-    images = np.array([crop(img) for img in images])
+    images = np.array([process_image(img) for img in images])
     return images
 
 
