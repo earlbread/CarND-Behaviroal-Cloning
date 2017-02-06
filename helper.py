@@ -9,26 +9,6 @@ JSON_MODEL_FILE = 'model.json'
 WEIGHTS_FILE = 'model.h5'
 
 
-def load_train_data():
-    images = []
-    steering_angles = []
-
-    log = pd.read_csv(DRIVING_LOG_FILE, skipinitialspace=True)
-
-    for i, steering in enumerate(log['steering']):
-        images.append(cv2.imread(log['center'][i]))
-        images.append(cv2.imread(log['left'][i]))
-        images.append(cv2.imread(log['right'][i]))
-        steering_angles.append(steering)
-        steering_angles.append(steering + 0.25)
-        steering_angles.append(steering - 0.25)
-
-    images = np.array(images)
-    steering_angles = np.array(steering_angles)
-
-    return images, steering_angles
-
-
 def get_data_from_log():
     log = pd.read_csv(DRIVING_LOG_FILE, skipinitialspace=True)
 
@@ -94,11 +74,6 @@ def process_image(image):
     image = equalizeHist(image)
 
     return image
-
-
-def preprocess(images):
-    images = np.array([process_image(img) for img in images])
-    return images
 
 
 def save_model(model):

@@ -44,16 +44,6 @@ def get_model():
     return model
 
 
-def train_model(model, X_train, y_train):
-    # Hyperparameters
-    EPOCHS = 5
-    BATCH_SIZE = 128
-    model.compile('adam', 'mse')
-    history = model.fit(X_train, y_train, nb_epoch=EPOCHS, batch_size=BATCH_SIZE,
-                        validation_split=0.2, shuffle=True)
-    helper.save_model(model)
-
-
 if __name__ == '__main__':
     epochs = 5
     batch_size = 128
