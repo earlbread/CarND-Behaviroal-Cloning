@@ -29,6 +29,49 @@ def load_train_data():
     return images, steering_angles
 
 
+def get_data_from_log():
+    log = pd.read_csv(DRIVING_LOG_FILE, skipinitialspace=True)
+
+    frames = [log['center'], log['left'], log['right']]
+    images = pd.concat(frames).reset_index()[0]
+
+    frames = [log['steering'], log['steering'] + 0.25, log['steering'] - 0.25]
+    steerings = pd.concat(frames).reset_index()['steering']
+
+    df = pd.DataFrame({'image': images, 'steering': steerings})
+
+    return df
+
+
+def train_validation_split(data, validation_split=0.2):
+    def reindex(data):
+        return data.reset_index().drop('index', 1)
+
+    mask = np.random.rand(len(data)) < validation_split
+
+    validation = reindex(data[mask])
+    train = reindex(data[~mask])
+
+    return train, validation
+
+
+def generate_batch(data, batch_size=128):
+    while True:
+        batch_x = []
+        batch_y = []
+        for _ in range(batch_size):
+            index = np.random.randint(len(data))
+
+            image = cv2.imread(data['image'][index])
+            image = process_image(image)
+
+            steering = data['steering'][index]
+
+            batch_x.append(image)
+            batch_y.append(steering)
+        yield np.array(batch_x), np.array(batch_y)
+
+
 def crop(image):
     h = 66
     w = 200
