@@ -55,8 +55,24 @@ def train_model(model, X_train, y_train):
 
 
 if __name__ == '__main__':
-    X_train, y_train = helper.load_train_data()
-    X_train = helper.preprocess(X_train)
+    epochs = 5
+    batch_size = 128
+
     model = get_model()
-    model.summary()
-    train_model(model, X_train, y_train)
+    model.compile('adam', 'mse')
+
+    driving_data = helper.get_data_from_log()
+    train, val = helper.train_validation_split(driving_data)
+
+    train_gen = helper.generate_batch(train, batch_size)
+    val_gen = helper.generate_batch(val, batch_size)
+
+    samples_per_epoch = len(train) + (batch_size - len(train) % batch_size)
+    nb_val_samples = len(val) + (batch_size - len(val) % batch_size)
+
+    history = model.fit_generator(train_gen,
+                                  samples_per_epoch=samples_per_epoch,
+                                  nb_epoch=epochs,
+                                  validation_data=val_gen,
+                                  nb_val_samples=nb_val_samples)
+    helper.save_model(model)
