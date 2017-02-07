@@ -83,10 +83,18 @@ def random_brightness(image):
     gamma = np.random.uniform(0.5, 1.5)
     return adjust_gamma(image, gamma=gamma)
 
+
+def random_translate(image, px=20, py=6):
+    x, y = np.random.randint(-px, py, 2)
+    M = np.float32([[1, 0, x], [0, 1, y]])
+    return cv2.warpAffine(image,M, (image.shape[1], image.shape[0]))
+
+
 def process_image(image):
     image = crop(image)
     image = equalizeHist(image)
     image = random_brightness(image)
+    image = random_translate(image)
 
     return image
 
