@@ -62,28 +62,6 @@ def crop(image):
     return image[y:y+h, x:x+w]
 
 
-def equalizeHist(image):
-    image[:,:,0] = cv2.equalizeHist(image[:,:,0])
-    image[:,:,1] = cv2.equalizeHist(image[:,:,1])
-    image[:,:,2] = cv2.equalizeHist(image[:,:,2])
-    return image
-
-
-def adjust_gamma(image, gamma=1.0):
-    # build a lookup table mapping the pixel values [0, 255] to
-    # their adjusted gamma values
-    invGamma = 1.0 / gamma
-    table = np.array([((i / 255.0) ** invGamma) * 255
-        for i in np.arange(0, 256)]).astype("uint8")
-
-    # apply gamma correction using the lookup table
-    return cv2.LUT(image, table)
-
-def random_brightness(image):
-    gamma = np.random.uniform(0.5, 1.5)
-    return adjust_gamma(image, gamma=gamma)
-
-
 def random_translate(image):
     px = int(image.shape[1] / 10)
     py = int(image.shape[0] / 10)
@@ -95,8 +73,6 @@ def random_translate(image):
 
 def process_image(image):
     image = crop(image)
-    image = equalizeHist(image)
-    image = random_brightness(image)
     image = random_translate(image)
 
     return image
