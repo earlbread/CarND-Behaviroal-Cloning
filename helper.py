@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 import pandas as pd
 
+
 DRIVING_LOG_FILE = 'driving_log.csv'
 JSON_MODEL_FILE = 'model.json'
 WEIGHTS_FILE = 'model.h5'
@@ -43,9 +44,9 @@ def generate_batch(data, batch_size=128):
             index = np.random.randint(len(data))
 
             image = cv2.imread(data['image'][index])
-            image = process_image(image)
-
             steering = data['steering'][index]
+
+            image, steering = process_image(image, steering)
 
             batch_x.append(image)
             batch_y.append(steering)
@@ -71,11 +72,19 @@ def random_translate(image):
     return cv2.warpAffine(image,M, (image.shape[1], image.shape[0]))
 
 
-def process_image(image):
+def random_flip(image, steering_angle, prob=0.5):
+    if np.random.rand() < prob:
+        return np.fliplr(image), -steering_angle
+    else:
+        return image, steering_angle
+
+
+def process_image(image, steering):
     image = crop(image)
     image = random_translate(image)
+    image, steering = random_flip(image, steering)
 
-    return image
+    return image, steering
 
 
 def save_model(model):
