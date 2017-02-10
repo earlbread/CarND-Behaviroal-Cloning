@@ -1,4 +1,4 @@
-from keras.models import Sequential
+from keras.models import Sequential, save_model
 from keras.layers import Dense, Activation, Flatten
 from keras.layers.convolutional import Convolution2D
 from keras.layers.normalization import BatchNormalization
@@ -65,4 +65,4 @@ if __name__ == '__main__':
                                   nb_epoch=epochs,
                                   validation_data=val_gen,
                                   nb_val_samples=nb_val_samples)
-    helper.save_model(model)
+    save_model(model, 'model.h5')
