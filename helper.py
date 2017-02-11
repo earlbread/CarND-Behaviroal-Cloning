@@ -16,7 +16,7 @@ def get_data_from_log():
     frames = [log['center'], log['left'], log['right']]
     images = pd.concat(frames).reset_index()[0]
 
-    frames = [log['steering'], log['steering'] + 0.25, log['steering'] - 0.25]
+    frames = [log['steering'], log['steering'] + 0.3, log['steering'] - 0.3]
     steerings = pd.concat(frames).reset_index()['steering']
 
     df = pd.DataFrame({'image': images, 'steering': steerings})
