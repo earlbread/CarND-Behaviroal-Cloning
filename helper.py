@@ -85,12 +85,3 @@ def process_image(image, steering):
     image, steering = random_flip(image, steering)
 
     return image, steering
-
-
-def save_model(model):
-    # Store model in file
-    model_json = model.to_json()
-    with open(JSON_MODEL_FILE, 'w') as f:
-        json.dump(model_json, f)
-
-    model.save_weights(WEIGHTS_FILE)
