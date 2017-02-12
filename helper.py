@@ -13,15 +13,26 @@ WEIGHTS_FILE = 'model.h5'
 def get_data_from_log():
     log = pd.read_csv(DRIVING_LOG_FILE, skipinitialspace=True)
 
-    frames = [log['center'], log['left'], log['right']]
-    images = pd.concat(frames).reset_index()[0]
+    return log
 
-    frames = [log['steering'], log['steering'] + 0.3, log['steering'] - 0.3]
-    steerings = pd.concat(frames).reset_index()['steering']
 
-    df = pd.DataFrame({'image': images, 'steering': steerings})
+def get_new_image(data):
+    index = np.random.randint(len(data))
+    choice = np.random.randint(0, 3)
 
-    return df
+    if choice == 0:
+        image = cv2.imread(data['center'][index])
+        steering = data['steering'][index]
+    elif choice == 1:
+        image = cv2.imread(data['left'][index])
+        steering = data['steering'][index] + 0.25
+    else:
+        image = cv2.imread(data['right'][index])
+        steering = data['steering'][index] - 0.25
+
+    image, steering = process_image(image, steering)
+
+    return image, steering
 
 
 def train_validation_split(data, validation_split=0.2):
@@ -41,12 +52,7 @@ def generate_batch(data, batch_size=128):
         batch_x = []
         batch_y = []
         for _ in range(batch_size):
-            index = np.random.randint(len(data))
-
-            image = cv2.imread(data['image'][index])
-            steering = data['steering'][index]
-
-            image, steering = process_image(image, steering)
+            image, steering = get_new_image(data)
 
             batch_x.append(image)
             batch_y.append(steering)
