@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 import pandas as pd
 from scipy.misc import imresize
+from sklearn.utils import shuffle
 
 
 DRIVING_LOG_FILE = 'driving_log.csv'
@@ -17,8 +18,23 @@ def get_data_from_log():
     return log
 
 
-def get_new_image(data):
-    index = np.random.randint(len(data))
+def train_validation_split(data, validation_split=0.2):
+    def reindex(data):
+        return data.reset_index().drop('index', 1)
+
+    mask = np.random.rand(len(data)) < validation_split
+
+    validation = reindex(data[mask])
+    train = reindex(data[~mask])
+
+    return train, validation
+
+
+def get_shuffled_dataframe(df):
+    return df.sample(frac=1).reset_index(drop=True)
+
+
+def get_new_image(data, index):
     choice = np.random.randint(0, 3)
     correction = 0.25
 
@@ -39,28 +55,28 @@ def get_new_image(data):
     return image, steering
 
 
-def train_validation_split(data, validation_split=0.2):
-    def reindex(data):
-        return data.reset_index().drop('index', 1)
+def generate_batch(samples, batch_size=128):
+    num_samples = len(samples)
 
-    mask = np.random.rand(len(data)) < validation_split
-
-    validation = reindex(data[mask])
-    train = reindex(data[~mask])
-
-    return train, validation
-
-
-def generate_batch(data, batch_size=128):
     while True:
-        batch_x = []
-        batch_y = []
-        for _ in range(batch_size):
-            image, steering = get_new_image(data)
+        new_samples = get_shuffled_dataframe(samples)
+        for offset in range(0, num_samples, batch_size):
+            images = []
+            steerings = []
+            start = offset
+            end = offset + batch_size
+            end = num_samples if end > num_samples else end
 
-            batch_x.append(image)
-            batch_y.append(steering)
-        yield np.array(batch_x), np.array(batch_y)
+            for i in range(start, end):
+                image, steering = get_new_image(new_samples, i)
+
+                images.append(image)
+                steerings.append(steering)
+
+            batch_x = np.array(images)
+            batch_y = np.array(steerings)
+
+            yield shuffle(batch_x, batch_y)
 
 
 def crop_and_resize(image, top=60, bottom=25, size=(64, 64)):
