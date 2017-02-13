@@ -3,6 +3,7 @@ import json
 import cv2
 import numpy as np
 import pandas as pd
+from scipy.misc import imresize
 
 
 DRIVING_LOG_FILE = 'driving_log.csv'
@@ -59,14 +60,14 @@ def generate_batch(data, batch_size=128):
         yield np.array(batch_x), np.array(batch_y)
 
 
-def crop(image):
-    h = 66
-    w = 200
-
-    x = int((image.shape[1] - w) / 2)
-    y = int((image.shape[0] - h) / 2)
-
-    return image[y:y+h, x:x+w]
+def crop_and_resize(image, top=60, bottom=25, size=(64, 64)):
+    """
+    After crop top and bottom, resize image.
+    """
+    row = image.shape[0]
+    cropped = image[top:row-bottom, :]
+    resized = imresize(cropped, size)
+    return resized
 
 
 def random_translate(image):
@@ -86,7 +87,7 @@ def random_flip(image, steering_angle, prob=0.5):
 
 
 def process_image(image, steering):
-    image = crop(image)
+    image = crop_and_resize(image)
     image = random_translate(image)
     image, steering = random_flip(image, steering)
 

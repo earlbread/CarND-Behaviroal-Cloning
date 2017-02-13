@@ -8,7 +8,7 @@ import helper
 def get_model():
     model = Sequential()
 
-    model.add(BatchNormalization(input_shape=(66, 200, 3)))
+    model.add(BatchNormalization(input_shape=(64, 64, 3)))
 
     model.add(Convolution2D(24, 5, 5, subsample=(2, 2)))
     model.add(Activation('elu'))
