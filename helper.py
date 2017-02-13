@@ -20,16 +20,17 @@ def get_data_from_log():
 def get_new_image(data):
     index = np.random.randint(len(data))
     choice = np.random.randint(0, 3)
+    correction = 0.25
 
     if choice == 0:
         image = cv2.imread(data['center'][index])
         steering = data['steering'][index]
     elif choice == 1:
         image = cv2.imread(data['left'][index])
-        steering = data['steering'][index] + 0.25
+        steering = data['steering'][index] + correction
     else:
         image = cv2.imread(data['right'][index])
-        steering = data['steering'][index] - 0.25
+        steering = data['steering'][index] - correction
 
     image, steering = process_image(image, steering)
 
