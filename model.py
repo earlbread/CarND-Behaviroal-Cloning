@@ -57,8 +57,8 @@ if __name__ == '__main__':
     train_gen = helper.generate_batch(train, batch_size)
     val_gen = helper.generate_batch(val, batch_size)
 
-    samples_per_epoch = len(train) + (batch_size - len(train) % batch_size)
-    nb_val_samples = len(val) + (batch_size - len(val) % batch_size)
+    samples_per_epoch = len(train)
+    nb_val_samples = len(val)
 
     history = model.fit_generator(train_gen,
                                   samples_per_epoch=samples_per_epoch,
