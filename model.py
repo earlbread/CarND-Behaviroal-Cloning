@@ -2,8 +2,14 @@ from keras.models import Sequential, save_model
 from keras.layers import Dense, Activation, Flatten
 from keras.layers.convolutional import Convolution2D
 from keras.layers.normalization import BatchNormalization
+from keras.callbacks import Callback
 
 import helper
+
+class SaveEpoch(Callback):
+    def on_epoch_end(self, epoch, logs={}):
+        save_model(self.model, '{}.h5'.format(epoch + 1))
+
 
 def get_model():
     model = Sequential()
@@ -60,9 +66,11 @@ if __name__ == '__main__':
     samples_per_epoch = len(train)
     nb_val_samples = len(val)
 
+    callbacks = [SaveEpoch()]
+
     history = model.fit_generator(train_gen,
                                   samples_per_epoch=samples_per_epoch,
                                   nb_epoch=epochs,
+                                  callbacks=callbacks,
                                   validation_data=val_gen,
                                   nb_val_samples=nb_val_samples)
-    save_model(model, 'model.h5')
