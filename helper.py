@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 from scipy.misc import imresize
 from sklearn.utils import shuffle
-
+from sklearn.model_selection import train_test_split
 
 DRIVING_LOG_FILE = 'driving_log.csv'
 JSON_MODEL_FILE = 'model.json'
@@ -19,13 +19,10 @@ def get_data_from_log():
 
 
 def train_validation_split(data, validation_split=0.2):
-    def reindex(data):
-        return data.reset_index().drop('index', 1)
+    train, validation = train_test_split(data, test_size=validation_split)
 
-    mask = np.random.rand(len(data)) < validation_split
-
-    validation = reindex(data[mask])
-    train = reindex(data[~mask])
+    train.reset_index(drop=True, inplace=True)
+    validation.reset_index(drop=True, inplace=True)
 
     return train, validation
 
