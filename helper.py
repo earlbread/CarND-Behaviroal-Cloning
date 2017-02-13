@@ -32,6 +32,8 @@ def get_new_image(data):
         image = cv2.imread(data['right'][index])
         steering = data['steering'][index] - correction
 
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
     image, steering = process_image(image, steering)
 
     return image, steering
