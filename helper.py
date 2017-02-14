@@ -86,6 +86,16 @@ def crop_and_resize(image, top=60, bottom=25, size=(64, 64)):
     return resized
 
 
+def random_brightness(image, brightness=0):
+    if brightness == 0:
+        brightness = np.random.uniform(0.15, 2.0)
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    v = hsv[:,:,2]
+    hsv[:,:,2] = np.where(v * brightness > 255, 255, v * brightness)
+    image = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
+    return image
+
+
 def random_translate(image, steering):
     rows = image.shape[0]
     cols = image.shape[1]
@@ -111,6 +121,7 @@ def random_flip(image, steering_angle, prob=0.5):
 
 def process_image(image, steering):
     image = crop_and_resize(image)
+    image = random_brightness(image)
     image, steering = random_translate(image, steering)
     image, steering = random_flip(image, steering)
 
