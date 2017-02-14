@@ -86,13 +86,20 @@ def crop_and_resize(image, top=60, bottom=25, size=(64, 64)):
     return resized
 
 
-def random_translate(image):
+def random_translate(image, steering):
+    rows = image.shape[0]
+    cols = image.shape[1]
+
     px = int(image.shape[1] / 10)
     py = int(image.shape[0] / 10)
-    x = np.random.randint(-px, px)
-    y = np.random.randint(-py, py)
+
+    x = np.random.uniform(-px, px)
+    y = np.random.uniform(-py, py)
+    steering = steering + (x / px * 0.4)
+
     M = np.float32([[1, 0, x], [0, 1, y]])
-    return cv2.warpAffine(image,M, (image.shape[1], image.shape[0]))
+
+    return cv2.warpAffine(image, M, (cols, rows)), steering
 
 
 def random_flip(image, steering_angle, prob=0.5):
@@ -104,7 +111,7 @@ def random_flip(image, steering_angle, prob=0.5):
 
 def process_image(image, steering):
     image = crop_and_resize(image)
-    image = random_translate(image)
+    image, steering = random_translate(image, steering)
     image, steering = random_flip(image, steering)
 
     return image, steering
