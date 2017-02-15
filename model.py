@@ -51,7 +51,7 @@ def get_model():
 
 
 if __name__ == '__main__':
-    epochs = 5
+    epochs = 10
     batch_size = 128
 
     model = get_model()
