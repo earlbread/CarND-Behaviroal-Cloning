@@ -2,6 +2,8 @@ simulator
 .DS_Store
 IMG
 driving_log.csv
-model.h5
-model.json
+data
+*.h5
 __pycache__
+
+!model.h5
