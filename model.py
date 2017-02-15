@@ -8,6 +8,8 @@ import helper
 
 
 class SaveEpoch(Callback):
+    """Extend class of keras Callback to save model every epoch.
+    """
     def on_epoch_end(self, epoch, logs={}):
         save_model(self.model, '{}.h5'.format(epoch + 1))
 

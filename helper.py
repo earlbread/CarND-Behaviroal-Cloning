@@ -10,12 +10,16 @@ DRIVING_LOG_FILE = './data/driving_log.csv'
 
 
 def get_data_from_log():
+    """Reads driving log file as Pandas dataframe.
+    """
     log = pd.read_csv(DRIVING_LOG_FILE, skipinitialspace=True)
 
     return log
 
 
 def train_validation_split(data, validation_split=0.2):
+    """Splits train and validation set and reset index.
+    """
     train, validation = train_test_split(data, test_size=validation_split)
 
     train.reset_index(drop=True, inplace=True)
@@ -25,10 +29,16 @@ def train_validation_split(data, validation_split=0.2):
 
 
 def get_shuffled_dataframe(df):
+    """Shuffles data and reset index.
+    """
     return df.sample(frac=1).reset_index(drop=True)
 
 
 def get_new_image(data, index):
+    """Reads a image from data corresponding to the index.
+
+    Chooses randomly either left, center, or right image and process image.
+    """
     choice = np.random.randint(0, 3)
     correction = 0.25
 
@@ -50,6 +60,8 @@ def get_new_image(data, index):
 
 
 def generate_batch(samples, batch_size=128):
+    """Reads images from samples by batch size and returns it.
+    """
     num_samples = len(samples)
 
     while True:
@@ -84,6 +96,8 @@ def crop_and_resize(image, top=60, bottom=25, size=(64, 64)):
 
 
 def random_brightness(image, brightness=0):
+    """Adjusts randomly brightness of the image.
+    """
     if brightness == 0:
         brightness = np.random.uniform(0.15, 2.0)
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
@@ -94,6 +108,8 @@ def random_brightness(image, brightness=0):
 
 
 def random_translate(image, steering):
+    """Moves the image randomly.
+    """
     rows = image.shape[0]
     cols = image.shape[1]
 
@@ -110,6 +126,8 @@ def random_translate(image, steering):
 
 
 def random_flip(image, steering_angle, prob=0.5):
+    """Flips the image randomly.
+    """
     if np.random.rand() < prob:
         return np.fliplr(image), -steering_angle
     else:
@@ -117,6 +135,8 @@ def random_flip(image, steering_angle, prob=0.5):
 
 
 def process_image(image, steering):
+    """Preprocesses on the image.
+    """
     image = crop_and_resize(image)
     image = random_brightness(image)
     image, steering = random_translate(image, steering)
