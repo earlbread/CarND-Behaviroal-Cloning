@@ -6,6 +6,7 @@ from keras.callbacks import Callback
 
 import helper
 
+
 class SaveEpoch(Callback):
     def on_epoch_end(self, epoch, logs={}):
         save_model(self.model, '{}.h5'.format(epoch + 1))

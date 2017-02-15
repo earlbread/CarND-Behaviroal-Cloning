@@ -1,8 +1,7 @@
-import json
-
 import cv2
 import numpy as np
 import pandas as pd
+
 from scipy.misc import imresize
 from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split
@@ -88,8 +87,8 @@ def random_brightness(image, brightness=0):
     if brightness == 0:
         brightness = np.random.uniform(0.15, 2.0)
     hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    v = hsv[:,:,2]
-    hsv[:,:,2] = np.where(v * brightness > 255, 255, v * brightness)
+    v = hsv[:, :, 2]
+    hsv[:, :, 2] = np.where(v * brightness > 255, 255, v * brightness)
     image = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
     return image
 
