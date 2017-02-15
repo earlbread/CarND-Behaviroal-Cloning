@@ -7,9 +7,7 @@ from scipy.misc import imresize
 from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split
 
-DRIVING_LOG_FILE = 'driving_log.csv'
-JSON_MODEL_FILE = 'model.json'
-WEIGHTS_FILE = 'model.h5'
+DRIVING_LOG_FILE = './data/driving_log.csv'
 
 
 def get_data_from_log():
