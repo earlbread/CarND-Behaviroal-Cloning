@@ -77,3 +77,5 @@ if __name__ == '__main__':
                                   callbacks=callbacks,
                                   validation_data=val_gen,
                                   nb_val_samples=nb_val_samples)
+
+    save_model(model, 'model.h5')
