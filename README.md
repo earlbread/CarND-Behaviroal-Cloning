@@ -51,7 +51,7 @@ Model Architecture and Training Strategy
 --------------------------------------
 
 ### 1. Model Architecture
-I used [NVIDIA's End to End Learning for Self-Driving Cars][] paper almost as it is. My model consisted of 5 convolutional neural networks with 5x5 and 3x3 filter size, and 4 fully connected layers. The model includes ELU layers for activation, and the data is normalized in the model using a Keras BatchNormalization layer.
+I used [NVIDIA's End to End Learning for Self-Driving Cars][] paper almost as it is. My model consisted of 5 convolutional neural networks with 5x5 and 3x3 filter size, and 4 fully connected layers. The model includes ELU layers for activation, and the data is normalized in the model using a Keras BatchNormalization layer. Also I added dropout layer to prevent overfitting just before output layer.
 
 ![Model Architecture](./images/model_architecture.jpg)
 
@@ -145,9 +145,16 @@ def generate_batch(samples, batch_size=128):
 
 #### 2. Training parameters
 
-- Activation: Elu
+##### 1. Activation: ELU
+
+I tried tanh, ReLU and ELU. But only ELU works for my model.
+
+##### 2. Epochs: 20
+
+I tried 100 epochs and saved model every epoch, and 20 epochs works well.
+
+##### 3. Other parameters
+
 - Optimizer: Adam
 - Batch Size: 128
-- Epochs: 8
 - Train/Validation split: 0.2
-
