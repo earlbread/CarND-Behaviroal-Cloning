@@ -1,5 +1,5 @@
 from keras.models import Sequential, save_model
-from keras.layers import Dense, Activation, Flatten
+from keras.layers import Dense, Activation, Flatten, Dropout
 from keras.layers.convolutional import Convolution2D
 from keras.layers.normalization import BatchNormalization
 from keras.callbacks import Callback
@@ -47,6 +47,7 @@ def get_model():
 
     model.add(Dense(10))
     model.add(Activation('elu'))
+    model.add(Dropout(0.2))
 
     model.add(Dense(1))
 
@@ -54,7 +55,7 @@ def get_model():
 
 
 if __name__ == '__main__':
-    epochs = 8
+    epochs = 20
     batch_size = 128
 
     model = get_model()
