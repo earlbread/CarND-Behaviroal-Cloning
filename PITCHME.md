@@ -1,8 +1,19 @@
 ## Behavioral Cloning
 
-End to End Driving Simulation Using Convnet
+딥러닝을 이용한 운전 시뮬레이션
+---
+
+## 프로젝트의 목적
+
+이미지 패턴인식을 통해 핸들의 각도를 예측
 
 ---
+
+## 학습 방식
+
+Input: 도로 이미지
+Output: 
+
 
 ## Video
 
@@ -27,5 +38,3 @@ End to End Driving Simulation Using Convnet
 ## Convolutional Neural Network
 
 ---
-
-
