@@ -6,7 +6,7 @@
 
 ## 프로젝트 목표
 
-![Result Video](https://www.youtube.com/embed/p3Oqb_QXzZk)
+이미지 패턴인식을 통해 핸들 각도를 예측하는 모델 제작
 
 ---
 
@@ -140,6 +140,13 @@ def random_flip(image, steering_angle, prob=0.5):
 ![Final image](assets/final.png)
 
 ---
+
+#### 프로젝트 결과
+
+![Result Video](https://www.youtube.com/embed/p3Oqb_QXzZk)
+
+---
+
 #### 결론
 
  - 데이터가 중요
