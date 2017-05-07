@@ -6,7 +6,7 @@
 
 ## 프로젝트 목표
 
-![Result Video](https://www.youtube.com/watch?v=p3Oqb_QXzZk)
+![Result Video](https://www.youtube.com/embed/p3Oqb_QXzZk)
 
 ---
 
